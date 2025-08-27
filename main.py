@@ -1,6 +1,7 @@
 from typing import Union
 from pydantic import BaseModel
 from fastapi import FastAPI, Request
+import uvicorn
 
 app = FastAPI()
 
@@ -19,3 +20,6 @@ async def read_item(item_id: int, request: Request):
   headers = request.headers
   cookies = request.cookies
   return {"item_id": item_id, "headers": headers, "cookies": cookies}
+
+if __name__ == "__main__":
+  uvicorn.run("main:app", host="localhost", port=8000, ssl_keyfile="./cert/clave.key", ssl_certfile="/cert/certificado.crt")
