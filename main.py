@@ -1,7 +1,7 @@
 from typing import Union
 from pydantic import BaseModel
+from fastapi import FastAPI, Request
 
-from fastapi import FastAPI
 app = FastAPI()
 
 class Item(BaseModel):
@@ -9,15 +9,13 @@ class Item(BaseModel):
   description: str = None
 
 
-@app.post("/items/")
+@app.post("/create_item/")
 async def create_item(item: Item):
-  return item
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+  return {"item": item}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/read_item/{item_id}")
+async def read_item(item_id: int, request: Request):
+  headers = request.headers
+  cookies = request.cookies
+  return {"item_id": item_id, "headers": headers, "cookies": cookies}
